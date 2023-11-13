@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from calculations import calculate_density, calculate_vector_winds, calculate_vector_winds_error
 
 
