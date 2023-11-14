@@ -33,6 +33,17 @@ def calculate_density(df_in: pd.DataFrame) -> pd.DataFrame:
 
     return df_out
 
+def wrap_wind_dir(u: np.ndarray, v:np.ndarray, wrap_factor=2.0) -> (np.ndarray, np.ndarray):
+    # http://colaweb.gmu.edu/dev/clim301/lectures/wind/wind-uv
+    ws = np.sqrt(u**2 + v**2) # m/s
+    wd = np.arctan2(v, u) * 180.0/np.pi # rads
+    for i,_ in enumerate(wd):
+        while wd[i] > (wrap_factor*360.0):
+            wd[i] -= 360.0
+        if wd[i] <= (0.0):
+            wd[i] += 360.0
+    return ws, wd
+
 def calculate_vector_winds(df_in: pd.DataFrame, using_dji_yaw=True) -> pd.DataFrame:
     df_out = df_in.copy()
 
@@ -56,14 +67,17 @@ def calculate_vector_winds(df_in: pd.DataFrame, using_dji_yaw=True) -> pd.DataFr
     if 'Vz' in df_in.columns:
         w_actual = w_rotated - df_in['Vz']
 
+    s_actual, wd_actual = wrap_wind_dir(u_actual, v_actual)
+
     df_out['Vr']  = v_rotated
     df_out['Ur']  = u_rotated
     df_out['Wr']  = w_rotated
 
-    df_out['Sc'] = np.sqrt(v_actual**2 + u_actual**2) # horizontal, compare with 'S'
+    df_out['Sc'] = s_actual # horizontal, compare with 'S'
     df_out['V']  = v_actual
     df_out['U']  = u_actual
     df_out['W']  = w_actual
+    df_out['WD'] = wd_actual
 
     return df_out
 
@@ -99,3 +113,45 @@ def calculate_vector_winds_error(df_in: pd.DataFrame, using_dji_yaw=True) -> pd.
         df_out['U_err'] = u_error
 
         return df_out
+
+def normal_vector(Vx: np.array, Vy: np.array):
+    Nx = []
+    Ny = []
+    for vx, vy in zip(Vx, Vy):
+        if (vy != 0.0) & (vy != np.nan):
+            nx1,_ = quadratic_equ(a=((vx/vy)**2 + 1), b=0, c=-1)
+            nx = abs(nx1)
+            ny = np.sqrt(1 - nx**2)
+
+        elif (vx != 0.0) & (vx != np.nan):
+            ny1,_ = quadratic_equ(a=((vy/vx)**2 + 1), b=0, c=-1)
+            ny = abs(ny1)
+            nx = np.sqrt(1 - ny**2)
+        else:
+            nx, ny = np.nan, np.nan
+
+        if (vx > 0.0) & (vy > 0.0): # Q1
+            ny = -ny # n = Q2
+        elif (vx < 0.0) & (vy < 0.0): # Q3
+            ny = -ny # n = Q2
+
+        Nx.append(nx)
+        Ny.append(ny)
+
+    return np.array(Nx), np.array(Ny)
+
+def quadratic_equ(a: float,b: float,c: float): # pylint: disable=invalid-name
+    """
+    solve for roots of quadratic equation with constants a, b, c
+    """
+    d = b**2 - 4 * a * c # pylint: disable=invalid-name
+
+    num1 = -b + np.sqrt(d)
+    num2 = -b - np.sqrt(d)
+    den  =  2 * a
+
+    root1 = num1 / den
+    root2 = num2 / den
+
+    return root1, root2
+
