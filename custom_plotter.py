@@ -12,7 +12,7 @@ def set_x_axis(df_in: pd.DataFrame, ts_value: str) -> np.ndarray:
 
     return x_axis
 
-def plot_wind_correction(df_in: pd.DataFrame, title="", ts_value='Timestamp', highlight_ground=True):
+def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp', highlight_ground=True):
 
     set_custom_rcparams()
     plot_num = 2

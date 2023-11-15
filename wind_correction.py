@@ -1,6 +1,6 @@
 import pandas as pd
-from custom_plotter import plot_wind_correction
-from calculations import calculate_density, calculate_vector_winds, \
+from .custom_plotter import wind_correction_plotter
+from .calculations import calculate_density, calculate_vector_winds, \
     calculate_vector_winds_error, average_wrt_aeris, calculate_crosswind_dataframe
 
 def calculations_on_merged_df(df_in: pd.DataFrame) -> pd.DataFrame:
@@ -34,6 +34,6 @@ if __name__ == "__main__":
         'Sc_avg','WD_avg','U_avg','V_avg','W_avg','U_err_avg','V_err_avg', \
             'Nx', 'Ny', 'cross_wind', 'cross_wind_err']])
 
-    plot_wind_correction(out)
+    wind_correction_plotter(out)
     plt.show()
 
