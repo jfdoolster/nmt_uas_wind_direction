@@ -3,7 +3,6 @@ from custom_plotter import plot_wind_correction
 from calculations import calculate_density, calculate_vector_winds, \
     calculate_vector_winds_error, average_wrt_aeris, calculate_crosswind_dataframe
 
-
 def calculations_on_merged_df(df_in: pd.DataFrame) -> pd.DataFrame:
     df_out = calculate_density(df_in)
     df_out = calculate_vector_winds(df_out)
@@ -29,7 +28,6 @@ if __name__ == "__main__":
 
     out = calculations_on_merged_df(merge)
     final = calculate_crosswind_dataframe(out)
-
 
     pd.set_option('display.precision', 2)
     print(final[['Timestamp','Seconds','T','P','Rho', \
