@@ -1,17 +1,8 @@
 import pandas as pd
-from .custom_plotter import wind_correction_plotter
-from .calculations import calculate_density, calculate_vector_winds, \
-    calculate_vector_winds_error, average_wrt_aeris, calculate_crosswind_dataframe
-
-def calculations_on_merged_df(df_in: pd.DataFrame) -> pd.DataFrame:
-    df_out = calculate_density(df_in)
-    df_out = calculate_vector_winds(df_out)
-    df_out = calculate_vector_winds_error(df_out)
-    df_out = average_wrt_aeris(df_out)
-
-    return df_out
 
 if __name__ == "__main__":
+    from wind_calc import calculations_on_merged_df, calculate_crosswind_dataframe
+    from wind_plotter import wind_correction_plotter
 
     import argparse
     import matplotlib.pyplot as plt

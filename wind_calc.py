@@ -1,19 +1,15 @@
 import pandas as pd
 import numpy as np
-from scipy.constants import gas_constant
 
-MM_AIR  = 28.9647 # g/mol
-ERR_TRISONICA_P = 1000 # Pa
-ERR_TRISONICA_T =    2 # C
+from wind_consts import *
 
-ERR_M600P_VX   = 0.05 # m/s
-ERR_M600P_VY   = 0.05 # m/s
-ERR_M600P_PHI  = 0.05 # rad
+def calculations_on_merged_df(df_in: pd.DataFrame) -> pd.DataFrame:
+    df_out = calculate_density(df_in)
+    df_out = calculate_vector_winds(df_out)
+    df_out = calculate_vector_winds_error(df_out)
+    df_out = average_wrt_aeris(df_out)
 
-ERR_TRISONICA_UM = 200E-3 # m/s
-ERR_TRISONICA_VM = 200E-3 # m/s
-ERR_TRISONICA_WM = 200E-3 # m/s
-ERR_TRISONICA_PHI  = 0.20 # rad
+    return df_out
 
 def calculate_density(df_in: pd.DataFrame) -> pd.DataFrame:
     df_out = df_in.copy()
