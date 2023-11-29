@@ -119,7 +119,7 @@ def average_wrt_aeris(df_in: pd.DataFrame) -> pd.DataFrame:
 
     for idx in df_in[df_in['CH4'].notnull()].index:
         for key in avg_keys:
-            df_out.loc[:, f"{key}_avg"] = df_in.loc[idx-2:idx+2, key].mean()
+            df_out.loc[idx, f"{key}_avg"] = df_in.loc[idx-2:idx+2, key].mean()
 
     return df_out
 
