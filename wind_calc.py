@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 
 from wind_consts import *
+from wind_utils import *
 
 def calculations_on_merged_df(df_in: pd.DataFrame) -> pd.DataFrame:
     df_out = calculate_density(df_in)
@@ -29,39 +30,29 @@ def calculate_density(df_in: pd.DataFrame) -> pd.DataFrame:
 
     return df_out
 
-def wrap_wind_dir(u: np.ndarray, v:np.ndarray, wrap_factor=2.0) -> (np.ndarray, np.ndarray):
-    # http://colaweb.gmu.edu/dev/clim301/lectures/wind/wind-uv
-    ws = np.sqrt(u**2 + v**2) # m/s
-    wd = np.arctan2(v, u) * 180.0/np.pi # rads
-    for i,_ in enumerate(wd):
-        while wd[i] > (wrap_factor*360.0):
-            wd[i] -= 360.0
-        if wd[i] <= (0.0):
-            wd[i] += 360.0
-    return ws, wd
-
 def calculate_vector_winds(df_in: pd.DataFrame, using_dji_yaw=True) -> pd.DataFrame:
     df_out = df_in.copy()
 
-    phi = df_in['MD']  * np.pi/180 # radians
-    if using_dji_yaw and ('Yaw' in df_in.columns):
-        phi = df_in['Yaw'] * np.pi/180 # radians
+    #phi = df_in['MD']  * np.pi/180.0 # radians
+    #if using_dji_yaw and ('Yaw' in df_in.columns):
+    #if using_dji_yaw:
+    phi = df_in['Yaw'] * np.pi/180.0 # radians
 
     u_rotated =  df_in['Um'] * np.cos(phi) + df_in['Vm'] * np.sin(phi) # m/s
     v_rotated = -df_in['Um'] * np.sin(phi) + df_in['Vm'] * np.cos(phi) # m/s
     w_rotated =  df_in['Wm'] # not actually rotated due to sensor noise
 
     v_actual = v_rotated
-    if 'Vx' in df_in.columns:
-        v_actual = v_rotated   + df_in['Vx']
+    #if 'Vx' in df_in.columns:
+    v_actual = v_rotated   + df_in['Vx']
 
     u_actual = u_rotated
-    if 'Vy' in df_in.columns:
-        u_actual = u_rotated   + df_in['Vy']
+    #if 'Vy' in df_in.columns:
+    u_actual = u_rotated   + df_in['Vy']
 
     w_actual = w_rotated
-    if 'Vz' in df_in.columns:
-        w_actual = w_rotated - df_in['Vz']
+    #if 'Vz' in df_in.columns:
+    w_actual = w_rotated - df_in['Vz']
 
     s_actual, wd_actual = wrap_wind_dir(u_actual, v_actual)
 
@@ -81,10 +72,10 @@ def calculate_vector_winds(df_in: pd.DataFrame, using_dji_yaw=True) -> pd.DataFr
 def calculate_vector_winds_error(df_in: pd.DataFrame, using_dji_yaw=True) -> pd.DataFrame:
     df_out = df_in.copy()
 
-    phi = df_in['MD']  * np.pi/180 # rads
+    phi = df_in['MD']  * np.pi/180.0 # rads
     ERR_PHI = ERR_TRISONICA_PHI    # rads
     if using_dji_yaw and ('Yaw' in df_in.columns):
-        phi = df_in['Yaw'] * np.pi/180 # rads
+        phi = df_in['Yaw'] * np.pi/180.0 # rads
         ERR_PHI = ERR_M600P_PHI        # rads
 
         du_dum  = np.cos(phi) + np.sin(phi)
@@ -134,7 +125,7 @@ def calculate_crosswind_dataframe(df_in: pd.DataFrame) -> pd.DataFrame:
     verr = df_out["V_err_avg"] * df_out["Nx"]
 
     nxerr = df_out["V_avg"] * 0.0
-    nyerr = df_out["V_avg"] * 0.0
+    nyerr = df_out["U_avg"] * 0.0
 
     x_wind_err = np.sqrt(uerr**2 + verr**2 + nxerr**2 + nyerr**2)
 
