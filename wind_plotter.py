@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+import wind_utils as utils
+
 def set_x_axis(df_in: pd.DataFrame, ts_value: str) -> np.ndarray:
     x_axis = df_in.index
     if ts_value not in df_in.columns:
@@ -25,11 +27,18 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
 
     axs[0].plot(xdata, df_in["Vm"], color="C0", label=r"$|\vec{u}_{m}|$")
     axs[0].plot(xdata, df_in["Um"], color="C1", label=r"$|\vec{v}_{m}|$")
-    axs[0].plot(xdata, df_in["S"], color="C2", label=r"$|\vec{V}_{w}|$")
+    axs[0].plot(xdata, df_in["S"], color="C2", label=r"$|\vec{V}_{w,m}|$")
+
+
+    df1 = df_in.copy()
+    mask = df_in['V'].isna() & df_in['Vm'].notna()
+    df1.loc[mask, 'V'] = df_in.loc[mask, 'Vm']
+    df1.loc[mask, 'U'] = df_in.loc[mask, 'Um']
+    WS,_ = utils.wrap_wind_dir(df1['U'], df1['V'])
 
     axs[1].plot(xdata, df_in["V"], color="C0", label=r"$|\vec{u}|$")
     axs[1].plot(xdata, df_in["U"], color="C1", label=r"$|\vec{v}|$")
-    axs[1].plot(xdata, df_in["Sc"], color="C2", label=r"$|\vec{V}_{w}|$")
+    axs[1].plot(xdata, WS, color="C2", label=r"$|\vec{V}_{w}|$")
 
     if highlight_ground and ("Sts" in df_in.columns):
         flight_df = df_in[df_in["Sts"] > 0]
@@ -44,7 +53,7 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
     fig.supylabel("Windspeed (m/s)")
     fs = 11
     axs[0].set_ylabel("Measured", fontsize=fs)
-    axs[1].set_ylabel("Corrected", fontsize=fs)
+    axs[1].set_ylabel("Adjusted", fontsize=fs)
 
     for ax in axs: # pylint: disable=invalid-name
         ax.legend()
