@@ -23,10 +23,10 @@ def calculate_density(df_in: pd.DataFrame) -> pd.DataFrame:
     rho_err = (m_air / gas_constant) * np.sqrt(\
         (ERR_TRISONICA_P/temperature)**2 +
         (pressure * ERR_TRISONICA_T/ temperature**2)**2
-    )
+    ) # kg/m^3
 
-    df_out["Rho"] = rho
-    df_out["Rho_err"] = rho_err
+    df_out["Rho"] = rho  # kg/m^3
+    df_out["Rho_err"] = rho_err  # kg/m^3
 
     return df_out
 
@@ -40,31 +40,31 @@ def calculate_vector_winds(df_in: pd.DataFrame, using_dji_yaw=True) -> pd.DataFr
 
     u_rotated =  df_in['Um'] * np.cos(phi) + df_in['Vm'] * np.sin(phi) # m/s
     v_rotated = -df_in['Um'] * np.sin(phi) + df_in['Vm'] * np.cos(phi) # m/s
-    w_rotated =  df_in['Wm'] # not actually rotated due to sensor noise
+    w_rotated =  df_in['Wm'] # m/s, not actually rotated due to sensor noise
 
-    v_actual = v_rotated
+    v_actual = v_rotated # m/s
     #if 'Vx' in df_in.columns:
-    v_actual = v_rotated   + df_in['Vx']
+    v_actual = v_rotated   + df_in['Vx'] # m/s
 
-    u_actual = u_rotated
+    u_actual = u_rotated # m/s
     #if 'Vy' in df_in.columns:
-    u_actual = u_rotated   + df_in['Vy']
+    u_actual = u_rotated   + df_in['Vy'] # m/s
 
-    w_actual = w_rotated
+    w_actual = w_rotated # m/s
     #if 'Vz' in df_in.columns:
-    w_actual = w_rotated - df_in['Vz']
+    w_actual = w_rotated - df_in['Vz'] # m/s
 
-    s_actual, wd_actual = wrap_wind_dir(u_actual, v_actual)
+    s_actual, wd_actual = wrap_wind_dir(u_actual, v_actual) # m/s, deg
 
-    df_out['Vr']  = v_rotated
-    df_out['Ur']  = u_rotated
-    df_out['Wr']  = w_rotated
+    df_out['Vr']  = v_rotated # m/s
+    df_out['Ur']  = u_rotated # m/s
+    df_out['Wr']  = w_rotated # m/s
 
-    df_out['Sc'] = s_actual # horizontal, compare with 'S'
-    df_out['V']  = v_actual
-    df_out['U']  = u_actual
-    df_out['W']  = w_actual
-    df_out['WD'] = wd_actual
+    df_out['Sc'] = s_actual # m/s, horizontal (compare with 'S')
+    df_out['V']  = v_actual # m/s
+    df_out['U']  = u_actual # m/s
+    df_out['W']  = w_actual # m/s
+    df_out['WD'] = wd_actual # m/s
 
     return df_out
 
@@ -110,6 +110,7 @@ def average_wrt_aeris(df_in: pd.DataFrame) -> pd.DataFrame:
 
     for idx in df_in[df_in['CH4'].notnull()].index:
         for key in avg_keys:
+            # todo: indexes may not be in order?
             df_out.loc[idx, f"{key}_avg"] = df_in.loc[idx-2:idx+2, key].mean()
 
     return df_out
@@ -119,22 +120,22 @@ def calculate_crosswind_dataframe(df_in: pd.DataFrame) -> pd.DataFrame:
     df_out.dropna(subset=['CH4','C2H6'], inplace=True)
     df_out['Nx'], df_out['Ny'] = normal_vector(df_out['Vx'], df_out['Vy'])
 
-    x_wind = df_out["V_avg"]*df_out["Nx"] + df_out["U_avg"]*df_out["Ny"]
+    x_wind = df_out["V_avg"]*df_out["Nx"] + df_out["U_avg"]*df_out["Ny"] # m/s
 
-    uerr = df_out["U_err_avg"] * df_out["Ny"]
-    verr = df_out["V_err_avg"] * df_out["Nx"]
+    uerr = df_out["U_err_avg"] * df_out["Ny"] # m/s
+    verr = df_out["V_err_avg"] * df_out["Nx"] # m/s
 
-    nxerr = df_out["V_avg"] * 0.0
-    nyerr = df_out["U_avg"] * 0.0
+    nxerr = df_out["V_avg"] * 0.0 # kayrds
+    nyerr = df_out["U_avg"] * 0.0 # kayrds
 
-    x_wind_err = np.sqrt(uerr**2 + verr**2 + nxerr**2 + nyerr**2)
+    x_wind_err = np.sqrt(uerr**2 + verr**2 + nxerr**2 + nyerr**2) # m/s
 
-    df_out["cross_wind"]     = x_wind
-    df_out["cross_wind_err"] = x_wind_err
+    df_out["cross_wind"]     = x_wind # m/s
+    df_out["cross_wind_err"] = x_wind_err # m/s
 
     df_out.drop(columns=['S','Um','Vm','Wm','Vr','Ur','Wr','Sc','V','U','W','WD','V_err','U_err'], inplace=True)
     df_out.reset_index(drop=True, inplace=True)
-    df_out['Seconds'] -= df_out.loc[0,'Seconds']
+    df_out['Seconds'] -= df_out['Seconds'].min() # s (start at zero)
     return df_out
 
 def normal_vector(Vx: np.array, Vy: np.array):
