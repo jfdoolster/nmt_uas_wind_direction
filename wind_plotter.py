@@ -15,8 +15,17 @@ def set_x_axis(df_in: pd.DataFrame, ts_value: str) -> np.ndarray:
     return x_axis
 
 def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp', highlight_ground=True) -> plt.Figure:
+    plt.rcParams['axes.grid'] = True
+    plt.rcParams['lines.linewidth'] = 1.5
+    plt.rcParams['legend.loc'] = "upper left"
+    plt.rc('font', size=12)
+    plt.rc('axes', titlesize=16)
+    plt.rc('axes', labelsize=14)
+    plt.rc('xtick', labelsize=12)
+    plt.rc('ytick', labelsize=12)
+    plt.rc('legend', fontsize=10)
+    plt.rc('figure', titlesize=16)
 
-    set_custom_rcparams()
     plot_num = 2
     fig, axs = plt.subplots(plot_num,1, sharex=True, sharey=True)
     fig.suptitle(title)
@@ -28,7 +37,6 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
     axs[0].plot(xdata, df_in["Vm"], color="C0", label=r"$|\vec{u}_{m}|$")
     axs[0].plot(xdata, df_in["Um"], color="C1", label=r"$|\vec{v}_{m}|$")
     axs[0].plot(xdata, df_in["S"], color="C2", label=r"$|\vec{V}_{w,m}|$")
-
 
     df1 = df_in.copy()
     mask = df_in['V'].isna() & df_in['Vm'].notna()
@@ -65,28 +73,3 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
 
     fig.tight_layout()
     return fig
-
-
-def set_custom_rcparams(grid=True):
-    """
-    custom rcparams
-    """
-    plt.rcParams['axes.grid'] = grid
-    plt.rcParams['lines.linewidth'] = 1.5
-    plt.rcParams['legend.loc'] = "upper left"
-    # Set the default text font size
-    plt.rc('font', size=12)
-    # Set the axes title font size
-    plt.rc('axes', titlesize=16)
-    # Set the axes labels font size
-    plt.rc('axes', labelsize=14)
-    # Set the font size for x tick labels
-    plt.rc('xtick', labelsize=12)
-    # Set the font size for y tick labels
-    plt.rc('ytick', labelsize=12)
-    # Set the legend font size
-    plt.rc('legend', fontsize=10)
-    # Set the font size of the figure title
-    plt.rc('figure', titlesize=16)
-
-
