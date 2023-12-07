@@ -39,13 +39,14 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
     axs[0].plot(xdata, df_in["S"], color="C2", label=r"$|\vec{V}_{w,m}|$")
 
     df1 = df_in.copy()
-    mask = df_in['V'].isna() & df_in['Vm'].notna()
+    mask = (df_in['V'].isna() & df_in['Vm'].notna()) | \
+        (df_in['U'].isna() & df_in['Um'].notna())
     df1.loc[mask, 'V'] = df_in.loc[mask, 'Vm']
     df1.loc[mask, 'U'] = df_in.loc[mask, 'Um']
     WS,_ = utils.wrap_wind_dir(df1['U'], df1['V'])
 
-    axs[1].plot(xdata, df_in["V"], color="C0", label=r"$|\vec{u}|$")
-    axs[1].plot(xdata, df_in["U"], color="C1", label=r"$|\vec{v}|$")
+    axs[1].plot(xdata, df1["V"], color="C0", label=r"$|\vec{u}|$")
+    axs[1].plot(xdata, df1["U"], color="C1", label=r"$|\vec{v}|$")
     axs[1].plot(xdata, WS, color="C2", label=r"$|\vec{V}_{w}|$")
 
     if highlight_ground and ("Sts" in df_in.columns):
@@ -55,8 +56,10 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
         ground_post = df_in.iloc[flight_end_idx+1 : df_in.index.max()+1]
 
         for ax in axs:
-            ax.axvspan(min(ground_pre[ts_value]), max(ground_pre[ts_value]), facecolor='grey', alpha=0.2, zorder=3)
-            ax.axvspan(min(ground_post[ts_value]), max(ground_post[ts_value]), facecolor='grey', alpha=0.2, zorder=3)
+            if len(ground_pre) > 0:
+                ax.axvspan(min(ground_pre[ts_value]), max(ground_pre[ts_value]), facecolor='grey', alpha=0.2, zorder=3)
+            if len(ground_post) > 0:
+                ax.axvspan(min(ground_post[ts_value]), max(ground_post[ts_value]), facecolor='grey', alpha=0.2, zorder=3)
 
     fig.supylabel("Windspeed (m/s)")
     fs = 11
