@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import plot_constants as consts
 
 import wind_utils as utils
 
@@ -18,13 +19,13 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
     plt.rcParams['axes.grid'] = True
     plt.rcParams['lines.linewidth'] = 1.5
     plt.rcParams['legend.loc'] = "upper left"
-    plt.rc('font', size=12)
-    plt.rc('axes', titlesize=16)
+    plt.rc('font', size=14)
+    plt.rc('axes', titlesize=20)
     plt.rc('axes', labelsize=14)
     plt.rc('xtick', labelsize=12)
     plt.rc('ytick', labelsize=12)
-    plt.rc('legend', fontsize=10)
-    plt.rc('figure', titlesize=16)
+    plt.rc('legend', fontsize=14)
+    plt.rc('figure', titlesize=20)
 
     plot_num = 2
     fig, axs = plt.subplots(plot_num,1, sharex=True, sharey=True)
@@ -62,17 +63,20 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
                 ax.axvspan(min(ground_post[ts_value]), max(ground_post[ts_value]), facecolor='grey', alpha=0.2, zorder=3)
 
     fig.supylabel("Windspeed (m/s)")
-    fs = 11
-    axs[0].set_ylabel("Measured", fontsize=fs)
-    axs[1].set_ylabel("Adjusted", fontsize=fs)
+    axs[0].set_ylabel("Measured")
+    axs[1].set_ylabel("Adjusted")
+
 
     for ax in axs: # pylint: disable=invalid-name
-        ax.legend()
+        #ax.legend()
         if ts_value == "Timestamp":
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
             ax.tick_params(axis="x", labelrotation=45, labelsize=8)
         elif ts_value.lower() == "seconds":
             ax.set_xlabel('Seconds')
 
+    handles, labels = axs[0].get_legend_handles_labels()
+    fig.legend(handles, [consts.U_SIMPLE, consts.V_SIMPLE, consts.WS_SIMPLE],
+                loc='upper left', bbox_to_anchor=(0.15, 0.63))
     fig.tight_layout()
     return fig
