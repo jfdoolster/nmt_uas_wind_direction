@@ -15,7 +15,8 @@ def set_x_axis(df_in: pd.DataFrame, ts_value: str) -> np.ndarray:
 
     return x_axis
 
-def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp', highlight_ground=True) -> plt.Figure:
+def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
+                highlight_ground=True, hightlight_label='__nolabel__') -> plt.Figure:
     plt.rcParams['axes.grid'] = True
     plt.rcParams['lines.linewidth'] = 1.5
     plt.rcParams['legend.loc'] = "upper left"
@@ -58,9 +59,9 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
 
         for ax in axs:
             if len(ground_pre) > 0:
-                ax.axvspan(min(ground_pre[ts_value]), max(ground_pre[ts_value]), facecolor='grey', alpha=0.2, zorder=3)
+                ax.axvspan(min(ground_pre[ts_value]), max(ground_pre[ts_value]), facecolor='grey', alpha=0.2, zorder=3, label=hightlight_label)
             if len(ground_post) > 0:
-                ax.axvspan(min(ground_post[ts_value]), max(ground_post[ts_value]), facecolor='grey', alpha=0.2, zorder=3)
+                ax.axvspan(min(ground_post[ts_value]), max(ground_post[ts_value]), facecolor='grey', alpha=0.2, zorder=3, label='__nolabel__')
 
     fig.supylabel("Windspeed (m/s)")
     axs[0].set_ylabel("Measured")
@@ -76,7 +77,10 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
             ax.set_xlabel('Seconds')
 
     handles, labels = axs[0].get_legend_handles_labels()
-    fig.legend(handles, [consts.U_SIMPLE, consts.V_SIMPLE, consts.WS_SIMPLE],
-                loc='upper left', bbox_to_anchor=(0.15, 0.63))
+    fig.legend(handles, [consts.U_SIMPLE, consts.V_SIMPLE, consts.WS_SIMPLE, hightlight_label],
+                loc='upper left', bbox_to_anchor=(0.13, 0.66))
     fig.tight_layout()
+    fig.subplots_adjust(
+        hspace=0.000,
+    )
     return fig
