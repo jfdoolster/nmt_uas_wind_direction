@@ -36,9 +36,9 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
 
     xdata = set_x_axis(df_in, ts_value)
 
-    axs[0].plot(xdata, df_in["Vm"], color="C0", label=r"$|\vec{u}_{m}|$")
-    axs[0].plot(xdata, df_in["Um"], color="C1", label=r"$|\vec{v}_{m}|$")
-    axs[0].plot(xdata, df_in["S"], color="C2", label=r"$|\vec{V}_{w,m}|$")
+    axs[0].plot(xdata, df_in["Vm"], color="C0", label=r"$u_{m}$")
+    axs[0].plot(xdata, df_in["Um"], color="C1", label=r"$v_{m}$")
+    axs[0].plot(xdata, df_in["S"], color="C2", label=r"$|\vec{u}_{m}|$")
 
     df1 = df_in.copy()
     mask = (df_in['V'].isna() & df_in['Vm'].notna()) | \
@@ -47,9 +47,9 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
     df1.loc[mask, 'U'] = df_in.loc[mask, 'Um']
     WS,_ = utils.wrap_wind_dir(df1['U'], df1['V'])
 
-    axs[1].plot(xdata, df1["V"], color="C0", label=r"$|\vec{u}|$")
-    axs[1].plot(xdata, df1["U"], color="C1", label=r"$|\vec{v}|$")
-    axs[1].plot(xdata, WS, color="C2", label=r"$|\vec{V}_{w}|$")
+    axs[1].plot(xdata, df1["V"], color="C0", label=r"$u$")
+    axs[1].plot(xdata, df1["U"], color="C1", label=r"$v$")
+    axs[1].plot(xdata, WS, color="C2", label=r"$|\vec{u}|$")
 
     if highlight_ground and ("Sts" in df_in.columns):
         flight_df = df_in[df_in["Sts"] > 0]
@@ -77,7 +77,7 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
             ax.set_xlabel('Seconds')
 
     handles, labels = axs[0].get_legend_handles_labels()
-    fig.legend(handles, [consts.U_SIMPLE, consts.V_SIMPLE, consts.WS_SIMPLE, hightlight_label],
+    fig.legend(handles, [consts.U_SIMPLE, consts.V_SIMPLE, consts.WS_MAG, hightlight_label],
                 loc='upper left', bbox_to_anchor=(0.13, 0.66))
     fig.tight_layout()
     fig.subplots_adjust(
