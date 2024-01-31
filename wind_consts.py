@@ -12,3 +12,10 @@ ERR_TRISONICA_UM = 200E-3 # m/s
 ERR_TRISONICA_VM = 200E-3 # m/s
 ERR_TRISONICA_WM = 200E-3 # m/s
 ERR_TRISONICA_PHI  = 0.20 # rad
+
+U_COMP = r"$u$"
+V_COMP = r"$v$"
+W_COMP = r"$w$"
+WS_VEC = r"$\vec{u}$"
+WS_MAG = r"$|\vec{u}|$"
+WS_PHASE = r"$\angle\vec{u}$"

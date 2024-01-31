@@ -1,17 +1,17 @@
 Minimal working example of NMT UAS wind correction routine
 
-developed and tested with python 3.11
+Developed and tested with python 3.11
 
-### usage
+### Usage
 
 ```bash
 python ./main.py -f /path/to/file
 
 #example dataset:
-python ./main.py -f ./data/merge.csv
+python ./main.py -f ./data/level0.csv
 ```
 
-### output
+### Output
 
 pandas dataframe with
 * original data timestamp ('Timestamp')
@@ -26,6 +26,6 @@ pandas dataframe with
 * UAS transect normal vector components ('Nx', 'Ny')
 * UAS cross wind along transect normal vector and error ('cross_wind', 'cross_wind_err') in m/s
 
-### contact:
+### Contact:
 
 jonathan.dooley@student.nmt.edu

@@ -1,8 +1,8 @@
 import pandas as pd
 
 if __name__ == "__main__":
-    from wind_calc import calculations_on_merged_df, calculate_crosswind_dataframe
-    from wind_plotter import wind_correction_plotter
+    from wind_calc import calculate_density, calculate_vector_winds, calculate_vector_winds_error
+    from wind_plotter import wind_adjustment_plotter
 
     import argparse
     import matplotlib.pyplot as plt
@@ -15,16 +15,16 @@ if __name__ == "__main__":
 
     rawdata_path = argdict['file']
 
-    merge = pd.read_csv(rawdata_path, parse_dates=['Timestamp', 'TS'])
+    level0 = pd.read_csv(rawdata_path, parse_dates=['Timestamp', 'TS'])
 
-    out = calculations_on_merged_df(merge)
-    final = calculate_crosswind_dataframe(out)
+    df_out = calculate_density(level0)
+    df_out = calculate_vector_winds(df_out)
+    df_out = calculate_vector_winds_error(df_out)
 
     pd.set_option('display.precision', 2)
-    print(final[['Timestamp','Seconds','T','P','Rho', \
-        'Sc_avg','WD_avg','U_avg','V_avg','W_avg','U_err_avg','V_err_avg', \
-            'Nx', 'Ny', 'cross_wind', 'cross_wind_err']])
+    print(df_out[['Timestamp','Seconds','T','P','Rho','Rho_err', \
+        'Sc','WD','U','U_err','V','V_err','W']])
 
-    wind_correction_plotter(out)
+    wind_adjustment_plotter(df_out)
     plt.show()
 

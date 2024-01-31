@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import plot_constants as consts
 
 import wind_utils as utils
+import wind_consts as consts
 
 def set_x_axis(df_in: pd.DataFrame, ts_value: str) -> np.ndarray:
     x_axis = df_in.index
@@ -15,7 +15,7 @@ def set_x_axis(df_in: pd.DataFrame, ts_value: str) -> np.ndarray:
 
     return x_axis
 
-def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
+def wind_adjustment_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
                 highlight_ground=True, hightlight_label='__nolabel__') -> plt.Figure:
     plt.rcParams['axes.grid'] = True
     plt.rcParams['lines.linewidth'] = 1.5
@@ -77,7 +77,7 @@ def wind_correction_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
             ax.set_xlabel('Seconds')
 
     handles, labels = axs[0].get_legend_handles_labels()
-    fig.legend(handles, [consts.U_SIMPLE, consts.V_SIMPLE, consts.WS_MAG, hightlight_label],
+    fig.legend(handles, [consts.U_COMP, consts.V_COMP, consts.WS_MAG, hightlight_label],
                 loc='upper left', bbox_to_anchor=(0.13, 0.66))
     fig.tight_layout()
     fig.subplots_adjust(
