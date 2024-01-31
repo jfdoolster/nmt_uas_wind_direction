@@ -3,4 +3,4 @@ __pycache__
 data/**
 
 #Allow
-!data/merge.csv
+!data/*.csv
