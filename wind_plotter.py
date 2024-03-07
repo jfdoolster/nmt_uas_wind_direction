@@ -53,15 +53,16 @@ def wind_adjustment_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
 
     if highlight_ground and ("Sts" in df_in.columns):
         flight_df = df_in[df_in["Sts"] > 0]
-        flight_start_idx, flight_end_idx = flight_df.index.min(), flight_df.index.max()
-        ground_pre  = df_in.iloc[df_in.index.min() : flight_start_idx]
-        ground_post = df_in.iloc[flight_end_idx+1 : df_in.index.max()+1]
+        if len(flight_df) > 0:
+            flight_start_idx, flight_end_idx = flight_df.index.min(), flight_df.index.max()
+            ground_pre  = df_in.iloc[df_in.index.min() : flight_start_idx]
+            ground_post = df_in.iloc[flight_end_idx+1 : df_in.index.max()+1]
 
-        for ax in axs:
-            if len(ground_pre) > 0:
-                ax.axvspan(min(ground_pre[ts_value]), max(ground_pre[ts_value]), facecolor='grey', alpha=0.2, zorder=3, label=hightlight_label)
-            if len(ground_post) > 0:
-                ax.axvspan(min(ground_post[ts_value]), max(ground_post[ts_value]), facecolor='grey', alpha=0.2, zorder=3, label='__nolabel__')
+            for ax in axs:
+                if len(ground_pre) > 0:
+                    ax.axvspan(min(ground_pre[ts_value]), max(ground_pre[ts_value]), facecolor='grey', alpha=0.2, zorder=3, label=hightlight_label)
+                if len(ground_post) > 0:
+                    ax.axvspan(min(ground_post[ts_value]), max(ground_post[ts_value]), facecolor='grey', alpha=0.2, zorder=3, label='__nolabel__')
 
     fig.supylabel("Windspeed (m/s)")
     axs[0].set_ylabel("Measured")
