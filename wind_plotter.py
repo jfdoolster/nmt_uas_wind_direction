@@ -31,7 +31,7 @@ def wind_adjustment_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
     plot_num = 2
     fig, axs = plt.subplots(plot_num,1, sharex=True, sharey=True)
     fig.suptitle(title)
-    fig.set_figheight(5)
+    fig.set_figheight(4.5)
     fig.set_figwidth(10)
 
     xdata = set_x_axis(df_in, ts_value)
