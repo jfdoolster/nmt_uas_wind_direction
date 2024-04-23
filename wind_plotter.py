@@ -30,7 +30,6 @@ def wind_adjustment_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
 
     plot_num = 2
     fig, axs = plt.subplots(plot_num,1, sharex=True, sharey=True)
-    fig.suptitle(title)
     fig.set_figheight(4.5)
     fig.set_figwidth(10)
 
@@ -39,6 +38,7 @@ def wind_adjustment_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
     axs[0].plot(xdata, df_in["Vm"], color="C0", label=r"$u_{m}$")
     axs[0].plot(xdata, df_in["Um"], color="C1", label=r"$v_{m}$")
     axs[0].plot(xdata, df_in["S"], color="C2", label=r"$|\vec{u}_{m}|$")
+    axs[0].set_title(title)
 
     df1 = df_in.copy()
     mask = (df_in['V'].isna() & df_in['Vm'].notna()) | \
