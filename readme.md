@@ -18,7 +18,7 @@ CSV file with the following headers (at least):
 * Measured vector winds (`'Um'`, `'Vm'`, `'Wm'`) in m/s
 * Measured vehicle velocity (`'Vx'`, `'Vy'`, `'Vz'`) in m/s
     * assuming East-North-Up coordinate system (`+'Vx'` moving East, `+'Vy'` moving North, `+'Vz'` increasing in altitude)
-    * **May not be default coordinate system from UAV**
+    * **May not be default coordinate system from Vehicle/UAV**
 * Temperature (`'T'`) in Celsius
 * Pressure (`'P'`) in hPa
 * Anemometer Compass heading, Mag. Direction, (`'MD'`) in degrees
