@@ -11,6 +11,22 @@ python ./main.py -f /path/to/file
 python ./main.py -f ./data/level0.csv
 ```
 
+### Input
+
+CSV file with the following headers (at least):
+* Data timestamp (`'Timestamp'`)
+* Measured vector winds (`'Um'`, `'Vm'`, `'Wm'`) in m/s
+* Measured vehicle velocity (`'Vx'`, `'Vy'`, `'Vz'`) in m/s
+    * assuming East-North-Up coordinate system (`+'Vx'` moving East, `+'Vy'` moving North, `+'Vz'` increasing in altitude)
+    * **May not be default coordinate system from UAV**
+* Temperature (`'T'`) in Celsius
+* Pressure (`'P'`) in hPa
+* Anemometer Compass heading, Mag. Direction, (`'MD'`) in degrees
+* Vehicle/UAV heading (`'Yaw'`) in degrees (optional, but recommended)
+
+Program automatically used vehicle heading (`'Yaw'`) is available.
+To use `'MD'` from TWS, don't include 'Yaw' in input csv and/or set `uav_heading=False` in `calculate_vector_winds()` and `calculate_vector_winds_error()` in `main.py`.
+
 ### Output
 
 pandas dataframe with

@@ -18,8 +18,8 @@ if __name__ == "__main__":
     level0 = pd.read_csv(rawdata_path, parse_dates=['Timestamp', 'TS'])
 
     df_out = calculate_density(level0)
-    df_out = calculate_vector_winds(df_out)
-    df_out = calculate_vector_winds_error(df_out)
+    df_out = calculate_vector_winds(df_out, uav_heading=True)
+    df_out = calculate_vector_winds_error(df_out, uav_heading=True)
 
     pd.set_option('display.precision', 2)
     print(df_out[['Timestamp','Seconds','T','P','Rho','Rho_err', \

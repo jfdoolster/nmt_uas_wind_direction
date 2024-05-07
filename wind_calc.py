@@ -23,13 +23,12 @@ def calculate_density(df_in: pd.DataFrame) -> pd.DataFrame:
     return df_out
 
 
-def calculate_vector_winds(df_in: pd.DataFrame, using_dji_yaw=True) -> pd.DataFrame:
+def calculate_vector_winds(df_in: pd.DataFrame, uav_heading=True) -> pd.DataFrame:
     df_out = df_in.copy()
 
-    #phi = df_in['MD']  * np.pi/180.0 # radians
-    #if using_dji_yaw and ('Yaw' in df_in.columns):
-    #if using_dji_yaw:
-    phi = df_in['Yaw'] * np.pi/180.0 # radians
+    phi = df_in['MD']  * np.pi/180.0 # radians
+    if uav_heading and ('Yaw' in df_in.columns):
+        phi = df_in['Yaw'] * np.pi/180.0 # radians
 
     u_rotated =  df_in['Um'] * np.cos(phi) + df_in['Vm'] * np.sin(phi) # m/s
     v_rotated = -df_in['Um'] * np.sin(phi) + df_in['Vm'] * np.cos(phi) # m/s
@@ -54,12 +53,12 @@ def calculate_vector_winds(df_in: pd.DataFrame, using_dji_yaw=True) -> pd.DataFr
     return df_out
 
 
-def calculate_vector_winds_error(df_in: pd.DataFrame, using_dji_yaw=True) -> pd.DataFrame:
+def calculate_vector_winds_error(df_in: pd.DataFrame, uav_heading=True) -> pd.DataFrame:
     df_out = df_in.copy()
 
     phi = df_in['MD']  * np.pi/180.0 # rads
     ERR_PHI = consts.ERR_TRISONICA_PHI    # rads
-    if using_dji_yaw and ('Yaw' in df_in.columns):
+    if uav_heading and ('Yaw' in df_in.columns):
         phi = df_in['Yaw'] * np.pi/180.0 # rads
         ERR_PHI = consts.ERR_M600P_PHI        # rads
 
