@@ -9,7 +9,7 @@ import wind_consts as consts
 def set_x_axis(df_in: pd.DataFrame, ts_value: str) -> np.ndarray:
     x_axis = df_in.index
     if ts_value not in df_in.columns:
-        print(f"WARN:\tUnknown key '{ts_value}', defaulting to dataframe index labels")
+        print(f"{'WARN':6s} : Unknown key '{ts_value}', defaulting to dataframe index labels")
     else:
         x_axis = df_in[ts_value]
 
