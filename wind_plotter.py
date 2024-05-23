@@ -35,8 +35,8 @@ def wind_adjustment_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
 
     xdata = set_x_axis(df_in, ts_value)
 
-    axs[0].plot(xdata, df_in["Vm"], color="C0", label=r"$u_{m}$")
-    axs[0].plot(xdata, df_in["Um"], color="C1", label=r"$v_{m}$")
+    axs[0].plot(xdata, df_in["Vm"], color="C0", label=r"$v_{m}$")
+    axs[0].plot(xdata, df_in["Um"], color="C1", label=r"$u_{m}$")
     axs[0].plot(xdata, df_in["S"], color="C2", label=r"$|\vec{u}_{m}|$")
     axs[0].set_title(title)
 
@@ -47,8 +47,8 @@ def wind_adjustment_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
     df1.loc[mask, 'U'] = df_in.loc[mask, 'Um']
     WS,_ = utils.wrap_wind_dir(df1['U'], df1['V'])
 
-    axs[1].plot(xdata, df1["V"], color="C0", label=r"$u$")
-    axs[1].plot(xdata, df1["U"], color="C1", label=r"$v$")
+    axs[1].plot(xdata, df1["V"], color="C0", label=r"$v$")
+    axs[1].plot(xdata, df1["U"], color="C1", label=r"$u$")
     axs[1].plot(xdata, WS, color="C2", label=r"$|\vec{u}|$")
 
     if highlight_ground and ("Sts" in df_in.columns):
