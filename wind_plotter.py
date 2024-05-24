@@ -18,15 +18,16 @@ def set_x_axis(df_in: pd.DataFrame, ts_value: str) -> np.ndarray:
 def wind_adjustment_plotter(df_in: pd.DataFrame, title="", ts_value='Timestamp',
                 highlight_ground=True, hightlight_label='__nolabel__') -> plt.Figure:
     plt.rcParams['axes.grid'] = True
-    plt.rcParams['lines.linewidth'] = 1.5
-    plt.rcParams['legend.loc'] = "upper left"
-    plt.rc('font', size=14)
-    plt.rc('axes', titlesize=20)
+    plt.rcParams['grid.alpha'] = 0.3
+    plt.rcParams['axes.axisbelow'] = True
+    #plt.rcParams['image.cmap'] = 'viridis_r'
+    plt.rc('font', size=12)
+    plt.rc('axes', titlesize=16)
     plt.rc('axes', labelsize=14)
     plt.rc('xtick', labelsize=12)
     plt.rc('ytick', labelsize=12)
     plt.rc('legend', fontsize=14)
-    plt.rc('figure', titlesize=20)
+    plt.rc('figure', titlesize=16)
 
     plot_num = 2
     fig, axs = plt.subplots(plot_num,1, sharex=True, sharey=True)
