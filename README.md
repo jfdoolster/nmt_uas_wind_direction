@@ -24,7 +24,7 @@ CSV file with the following headers (at least):
 * Anemometer Compass heading, Mag. Direction, (`'MD'`) in degrees
 * Vehicle/UAV heading (`'Yaw'`) in degrees (optional, but recommended)
 
-Program automatically used vehicle heading (`'Yaw'`) is available.
+Program automatically uses vehicle heading (`'Yaw'`) if available.
 To use `'MD'` from TWS, don't include `'Yaw'` in input csv and/or set `uav_heading=False` in `calculate_vector_winds()` and `calculate_vector_winds_error()` (see [`main.py`](./main.py) and [`wind_calc.py`](./wind_calc.py)).
 
 ### Output
