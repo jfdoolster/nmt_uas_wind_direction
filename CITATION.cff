@@ -4,8 +4,8 @@
 cff-version: 1.2.0
 title: nmt_uas_wind_direction
 message: >-
-  Static vector winds from UAV-mounted Trisonica anemometor
-  (MWE)
+  If you use this software, please cite it using the
+  metadata from this file.
 type: software
 authors:
   - given-names: Jonathan F
