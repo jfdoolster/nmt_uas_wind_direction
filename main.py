@@ -1,18 +1,20 @@
-import pandas as pd
 
 if __name__ == "__main__":
+
+    import pandas as pd
+    import matplotlib.pyplot as plt
     from wind_calc import calculate_density, calculate_vector_winds, calculate_vector_winds_error
     from wind_plotter import wind_adjustment_plotter
 
     import argparse
-    import matplotlib.pyplot as plt
-
     parser = argparse.ArgumentParser()
+    parser.add_argument('-d',  '--display' , default=True, action=argparse.BooleanOptionalAction, help='display module figures')
     parser.add_argument('-f', '--file', required=True, type=str,
         help='path to merged csv datafile with measured trisonica and UAV positional data')
     args = parser.parse_args()
     argdict = vars(args)
 
+    displayfigs=argdict['display']
     rawdata_path = argdict['file']
 
     level0 = pd.read_csv(rawdata_path, parse_dates=['Timestamp', 'TS'])
@@ -26,5 +28,6 @@ if __name__ == "__main__":
         'Sc','WD','U','U_err','V','V_err','W']])
 
     wind_adjustment_plotter(df_out)
-    plt.show()
+
+    if displayfigs: plt.show()
 
