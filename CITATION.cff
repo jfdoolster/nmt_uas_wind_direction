@@ -2,10 +2,10 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: tws_wind_direction
+title: nmt_uas_wind_direction
 message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
+  Static vector winds from UAV-mounted Trisonica anemometor
+  (MWE)
 type: software
 authors:
   - given-names: Jonathan F
@@ -14,3 +14,4 @@ authors:
     affiliation: New Mexico Institute of Mining and Technology
 repository-code: 'https://github.com/jfdoolster/tws_wind_direction.git'
 license: GPL-3.0
+date-released: '2024-07-01'
