@@ -12,6 +12,6 @@ authors:
     family-names: Dooley
     email: jonathan.dooley@student.nmt.edu
     affiliation: New Mexico Institute of Mining and Technology
-repository-code: 'https://github.com/jfdoolster/tws_wind_direction.git'
+repository-code: 'https://github.com/jfdoolster/nmt_uas_wind_direction.git'
 license: GPL-3.0
 date-released: '2024-07-01'
