@@ -62,8 +62,8 @@ def calculate_vector_winds_error(df_in: pd.DataFrame, uav_heading=True) -> pd.Da
         phi = df_in['Yaw'] * np.pi/180.0 # rads
         ERR_PHI = consts.ERR_M600P_PHI        # rads
 
-        du_dum  = np.cos(phi) + np.sin(phi)
-        du_dphi = -df_in['Um'] * np.sin(phi) + df_in['Vm'] * np.cos(phi)
+        du_dum  = np.cos(phi)
+        du_dphi = (df_in['Vm'] * np.cos(phi) - df_in['Um'] * np.sin(phi))
         du_dv   = 1
 
         u_error = np.sqrt(
@@ -71,8 +71,8 @@ def calculate_vector_winds_error(df_in: pd.DataFrame, uav_heading=True) -> pd.Da
                 (du_dphi)**2 * ERR_PHI**2 + \
                 (du_dv)**2 * consts.ERR_M600P_VY**2 )
 
-        dv_dvm  = -np.sin(phi) + np.cos(phi)
-        dv_dphi = -df_in['Vm'] * np.cos(phi) - df_in['Vm'] * np.sin(phi)
+        dv_dvm  = np.cos(phi)
+        dv_dphi = -(df_in['Vm'] * np.sin(phi) + df_in['Um'] * np.cos(phi))
         dv_dv   = 1
 
         v_error = np.sqrt(
